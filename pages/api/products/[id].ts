@@ -21,7 +21,7 @@ export default async function handler(
 permitido`,
       });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error en GET /api/products/${id}:`, error);
     return res.status(500).json({ error: "Error interno del servidor" });
   }

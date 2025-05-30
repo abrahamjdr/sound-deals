@@ -33,10 +33,18 @@ export default async function handler(
         });
         const prodGuardado = await nuevo.save();
         return res.status(201).json(prodGuardado);
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Error creando producto:", e);
         // Si es error de duplicado de SKU, manejarlo específicamente
-        if (e.code === 11000 && e.keyPattern?.sku) {
+        if (
+          typeof e === "object" &&
+          e !== null &&
+          "code" in e &&
+          (e as any).code === 11000 &&
+          "keyPattern" in e &&
+          (e as any).keyPattern &&
+          (e as any).keyPattern.sku
+        ) {
           return res.status(409).json({ error: `El SKU '${sku}' ya existe` });
         }
         return res.status(500).json({ error: "Error al crear el producto" });
@@ -48,7 +56,7 @@ export default async function handler(
 permitido`,
       });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error en GET /api/products:", error);
     return res.status(500).json({ error: "Error interno del servidor" });
   }

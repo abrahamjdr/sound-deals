@@ -33,7 +33,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Redondeamos a 2 decimales por estética
     commission = Math.round(commission * 100) / 100;
     return res.status(200).json({ commission });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error calculando comisión:", error);
     if (subtotal === undefined || !Array.isArray(items) || items.length === 0) {
       return res

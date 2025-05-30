@@ -4,9 +4,10 @@ if (!MONGODB_URI) {
   throw new Error("Por favor define la variable de entorno MONGODB_URI");
 }
 // Use global cache to avoid multiple connections in development
-let cached = (global as any).mongoose;
+let globalWithMongoose = global as typeof globalThis & { mongoose?: any };
+let cached = globalWithMongoose.mongoose;
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = globalWithMongoose.mongoose = { conn: null, promise: null };
 }
 async function dbConnect() {
   if (cached.conn) {
